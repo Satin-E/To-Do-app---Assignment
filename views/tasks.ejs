@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+</head>
+<body>
+    <h1>To-Do List</h1>
+
+    <!-- Form to create a new task -->
+    <form action="/tasks" method="POST">
+        <input type="text" name="title" placeholder="Enter a new task" required>
+        <button type="submit">Add Task</button>
+    </form>
+
+    <h2>Pending Tasks</h2>
+    <ul>
+        <% tasks.filter(task => task.state === 'pending').forEach(task => { %>
+            <li>
+                <%= task.title %>
+                <form action="/tasks/<%= task._id %>?_method=PUT" method="POST" style="display:inline;">
+                    <button type="submit" name="state" value="completed">Mark as Completed</button>
+                </form>
+                <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display:inline;">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+        <% }) %>
+    </ul>
+
+    <h2>Completed Tasks</h2>
+<ul>
+    <% tasks.filter(task => task.state === 'completed').forEach(task => { %>
+        <li>
+            <%= task.title %>
+            <form action="/tasks/<%= task._id %>?_method=PUT" method="POST" style="display:inline;">
+                <button type="submit" name="state" value="pending">Mark as Pending</button>
+            </form>
+            <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+    <% }) %>
+</ul>
+<form action="/auth/logout" method="POST">
+    <button type="submit">Logout</button>
+</form>
+</body>
+</html>
